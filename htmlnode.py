@@ -18,3 +18,19 @@ class TestHTMLNode(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class LeafNode(HTMLNode):
+    def __init__(self, tag, value, attributes=None):
+        if attributes is not None:
+            raise ValueError("LeafNode cannot have children")
+        super().__init__(tag, value, {})
+    
+    def to_html(self):
+        if not self.value:
+            raise ValueError("LeafNode must have a value")
+        if self.tag is None:
+            return self.value
+        else:
+            attribute_str = ' '.join([f'{key}="{value}"' for key, value in self.attributes.items()])
+            return f"<{self.tag} {attribute_str}>{self.value}</{self.tag}>"
+
